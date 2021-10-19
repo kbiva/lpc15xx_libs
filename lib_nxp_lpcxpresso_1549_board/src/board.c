@@ -41,8 +41,8 @@
  ****************************************************************************/
 
 /* System oscillator rate and RTC oscillator rate */
-extern const uint32_t OscRateIn;
-extern const uint32_t RTCOscRateIn;
+const uint32_t OscRateIn;
+const uint32_t RTCOscRateIn;
 
 /*****************************************************************************
  * Private functions

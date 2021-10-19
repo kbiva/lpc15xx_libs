@@ -50,7 +50,7 @@
 /* Prepare sector for write operation */
 uint8_t Chip_IAP_PreSectorForReadWrite(uint32_t strSector, uint32_t endSector)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_PREWRRITE_CMD;
 	command[1] = strSector;
@@ -63,7 +63,7 @@ uint8_t Chip_IAP_PreSectorForReadWrite(uint32_t strSector, uint32_t endSector)
 /* Copy RAM to flash */
 uint8_t Chip_IAP_CopyRamToFlash(uint32_t dstAdd, uint32_t *srcAdd, uint32_t byteswrt)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_WRISECTOR_CMD;
 	command[1] = dstAdd;
@@ -78,7 +78,7 @@ uint8_t Chip_IAP_CopyRamToFlash(uint32_t dstAdd, uint32_t *srcAdd, uint32_t byte
 /* Erase sector */
 uint8_t Chip_IAP_EraseSector(uint32_t strSector, uint32_t endSector)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_ERSSECTOR_CMD;
 	command[1] = strSector;
@@ -92,7 +92,7 @@ uint8_t Chip_IAP_EraseSector(uint32_t strSector, uint32_t endSector)
 /* Blank check sector */
 uint8_t Chip_IAP_BlankCheckSector(uint32_t strSector, uint32_t endSector)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_BLANK_CHECK_SECTOR_CMD;
 	command[1] = strSector;
@@ -103,9 +103,9 @@ uint8_t Chip_IAP_BlankCheckSector(uint32_t strSector, uint32_t endSector)
 }
 
 /* Read part identification number */
-uint32_t Chip_IAP_ReadPID()
+uint32_t Chip_IAP_ReadPID(void)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_REPID_CMD;
 	iap_entry(command, result);
@@ -114,20 +114,20 @@ uint32_t Chip_IAP_ReadPID()
 }
 
 /* Read boot code version number */
-uint8_t Chip_IAP_ReadBootCode()
+uint32_t Chip_IAP_ReadBootCode(void)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_READ_BOOT_CODE_CMD;
 	iap_entry(command, result);
 
-	return result[0];
+	return result[1] & 0xffff;
 }
 
 /* IAP compare */
 uint8_t Chip_IAP_Compare(uint32_t dstAdd, uint32_t srcAdd, uint32_t bytescmp)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_COMPARE_CMD;
 	command[1] = dstAdd;
@@ -139,9 +139,9 @@ uint8_t Chip_IAP_Compare(uint32_t dstAdd, uint32_t srcAdd, uint32_t bytescmp)
 }
 
 /* Reinvoke ISP */
-uint8_t Chip_IAP_ReinvokeISP()
+uint8_t Chip_IAP_ReinvokeISP(void)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_REINVOKE_ISP_CMD;
 	iap_entry(command, result);
@@ -150,20 +150,24 @@ uint8_t Chip_IAP_ReinvokeISP()
 }
 
 /* Read the unique ID */
-uint32_t Chip_IAP_ReadUID()
+uint32_t Chip_IAP_ReadUID(uint32_t* uid)
 {
-	uint32_t command[5], result[4];
-
+	uint32_t command[5], result[5];
+	uint32_t i;
+	
 	command[0] = IAP_READ_UID_CMD;
 	iap_entry(command, result);
 
-	return result[1];
+	for (i=0; i<4; i++)
+		*(uid+i) = result[i+1];
+	
+	return result[0];
 }
 
 /* Erase page */
 uint8_t Chip_IAP_ErasePage(uint32_t strPage, uint32_t endPage)
 {
-	uint32_t command[5], result[4];
+	uint32_t command[5], result[5];
 
 	command[0] = IAP_ERASE_PAGE_CMD;
 	command[1] = strPage;
