@@ -41,8 +41,8 @@
  ****************************************************************************/
 
 /* System oscillator rate and RTC oscillator rate */
-const uint32_t OscRateIn;
-const uint32_t RTCOscRateIn;
+const uint32_t OscRateIn = 12000000;
+const uint32_t RTCOscRateIn = 32768;
 
 /*****************************************************************************
  * Private functions
@@ -155,7 +155,7 @@ void Board_LED_Toggle(uint8_t LEDNumber)
 void Board_Init(void)
 {
 	/* Sets up DEBUG UART */
-	DEBUGINIT();
+	//DEBUGINIT();
 
 	/* Initialize GPIO */
 	Chip_GPIO_Init(LPC_GPIO);
